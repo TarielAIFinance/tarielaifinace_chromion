@@ -1,109 +1,93 @@
 import { API_CONFIG } from './config';
-import type { ChatRequest, ChatResponse, ApiError } from './types';
+import { ChatRequest, ChatResponse, ChatContext, ClientMessage, ApiRequestMessage, SystemConfig } from './types';
 
-export class ChatApiError extends Error {
-  constructor(public error: ApiError) {
-    super(error.message);
-    this.name = 'ChatApiError';
-  }
-}
+// Re-export types needed by components
+export type { ChatContext, ClientMessage, SystemConfig };
 
-// Helper function to delay execution
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// Default system configuration (minimal version)
+export const DEFAULT_SYSTEM_CONFIG: SystemConfig = {
+  identity: "",
+  capabilities: [],
+  constraints: []
+};
 
-async function fetchWithTimeout(
-  url: string,
-  options: RequestInit,
-  timeout = 10000
-): Promise<Response> {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-
+export async function sendChatMessage(message: string, context?: ChatContext): Promise<{ response: string; context: ChatContext }> {
   try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(id);
-    return response;
-  } catch (error) {
-    clearTimeout(id);
-    throw error;
-  }
-}
+    const endpoint = API_CONFIG.BASE_URL;
+    
+    // Initialize or update context with required systemConfig
+    const currentContext: ChatContext = context || {
+      messages: [],
+      systemConfig: DEFAULT_SYSTEM_CONFIG,
+      lastUserMessage: undefined
+    };
 
-export async function sendChatMessage(userMessageContent: string): Promise<ChatResponse> {
-  // Construct the new request payload
-  const requestPayload: ChatRequest = {
-    messages: [
-      { role: 'user', content: userMessageContent }
-    ]
-  };
+    // Add new user message
+    const userMessage: ClientMessage = {
+      role: 'user',
+      content: message,
+      timestamp: Date.now(),
+      id: `msg_${Date.now()}`
+    };
+    
+    // Prepare messages array - API handles system prompt internally
+    const apiMessages = [
+      ...currentContext.messages,
+      userMessage
+    ].map(({ role, content }) => ({ role, content }));
 
-  console.log('Sending request to:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CHAT}`);
-  console.log('Request payload:', requestPayload);
+    // Make API request
+    const request: ChatRequest = {
+      messages: apiMessages,
+      use_tools: false
+    };
 
-  try {
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CHAT}`, {
+    const response = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // Send the new payload structure
-      body: JSON.stringify(requestPayload)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request)
     });
-
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
-      // Attempt to get more detailed error message from response body
-      let errorMessage = `Server error: ${response.status}`;
-      try {
-        const errorBody = await response.json(); // Try parsing JSON error
-        errorMessage = errorBody.detail || errorBody.message || errorMessage;
-      } catch (e) {
-        // If JSON parsing fails, try reading as text
-        try {
-          errorMessage = await response.text();
-        } catch (textError) {
-          // Keep the original status code message if text also fails
-        }
-      }
-      console.error('Server error response detail:', errorMessage);
-      
-      throw new ChatApiError({
-        message: errorMessage,
-        status: response.status
-      });
+      throw new ChatApiError(
+        'Failed to get response from chat service',
+        response.status
+      );
     }
 
-    // Assuming response structure { response: string } based on previous types.ts update
-    const data: ChatResponse = await response.json(); 
-    console.log('Received response:', data);
-    return data;
+    const data = await response.json();
+    
+    // Add both messages to context
+    currentContext.messages.push(userMessage);
+    currentContext.messages.push({
+      role: 'assistant',
+      content: data.response,
+      timestamp: Date.now(),
+      id: `msg_${Date.now()}`
+    });
+
+    return {
+      response: data.response,
+      context: currentContext
+    };
 
   } catch (error) {
-    // Log the raw error first
-    console.error('Raw Chat API Error:', error);
+    console.error('Chat API Error:', error);
+    throw error instanceof ChatApiError ? error : new ChatApiError(
+      'An unexpected error occurred',
+      undefined,
+      { originalError: error }
+    );
+  }
+}
 
-    // Handle known ChatApiError
-    if (error instanceof ChatApiError) {
-      throw error; 
-    }
-
-    // Handle network errors specifically
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-        throw new ChatApiError({
-            message: 'Network error or CORS issue. Please check connection and server CORS configuration.',
-            status: 0 // Indicate network-level issue
-        });
-    }
-
-    // Catch-all for other unexpected errors
-    throw new ChatApiError({
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
-      status: -1 // Indicate unknown client-side error
-    });
+export class ChatApiError extends Error {
+  constructor(
+    message: string,
+    public status?: number,
+    public data?: any
+  ) {
+    super(message);
+    this.name = 'ChatApiError';
   }
 } 

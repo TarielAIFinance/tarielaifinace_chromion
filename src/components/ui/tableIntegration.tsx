@@ -68,7 +68,7 @@ export function parseTableData(content: string): TableData {
   // Handle year-based data format
   if (content.includes('Year') || content.includes('USDC') || content.includes('USDT')) {
     const yearPattern = /(\d{4})\s*\|\s*([\d.]+)/g;
-    let matches = [...content.matchAll(yearPattern)];
+    const matches = [...content.matchAll(yearPattern)];
     
     if (matches.length > 0) {
       const headers = ['Year', 'Yield (%)'];

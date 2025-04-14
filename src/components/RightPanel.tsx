@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { 
   RefreshCw,
   Code,
@@ -11,13 +13,14 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select/select";
 import { Label } from "@/components/ui/select/label";
 import { useId } from "react";
+import { getOrCreateSessionId } from '@/lib/api/session';
+import { getCurrentSessionCalls, addSessionUpdateListener, removeSessionUpdateListener } from '@/lib/api/session-calls';
 
 // Helper component for select items with descriptions
 const SelectItemWithDescription = ({
@@ -42,6 +45,32 @@ const SelectItemWithDescription = ({
 const RightPanel = () => {
   const modelSelectId = useId();
   const outputFormatId = useId();
+  const [sessionId, setSessionId] = useState<string>('');
+  const [sessionCalls, setSessionCalls] = useState<number>(0);
+
+  useEffect(() => {
+    // Initialize session ID
+    const id = getOrCreateSessionId();
+    setSessionId(id);
+
+    // Initialize call count only after we have a session ID
+    if (id) {
+      setSessionCalls(getCurrentSessionCalls(id));
+
+      // Listen for updates
+      const updateListener = (updatedSessionId: string, calls: number) => {
+        if (updatedSessionId === id) {
+          setSessionCalls(calls);
+        }
+      };
+
+      addSessionUpdateListener(updateListener);
+
+      return () => {
+        removeSessionUpdateListener(updateListener);
+      };
+    }
+  }, []);
 
   return (
     <div className="h-full flex flex-col p-4 bg-Tariel-dark-bg text-Tariel-text-secondary space-y-4 overflow-y-auto">
@@ -110,12 +139,12 @@ const RightPanel = () => {
         </Select>
       </div>
 
-      {/* Token Count */}
+      {/* Token Count - Updated to show actual session calls */}
       <div className="flex items-center justify-between pt-3">
         <label className="block text-xs font-medium text-Tariel-text-secondary">Agent calls</label>
         <span className="flex items-center">
           <Coins className="w-5 h-5 mr-1 text-Tariel-text-secondary" />
-          <span className="text-sm text-Tariel-text-light">0 / 30</span>
+          <span className="text-sm text-Tariel-text-light">{sessionCalls} / 30</span>
         </span>
       </div>
 

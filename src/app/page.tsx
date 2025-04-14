@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/ui/sidebar/Sidebar";
 import MainContent from "@/components/MainContent";
 import RightPanel from "@/components/RightPanel";
 import { BeamsBackground } from "@/components/ui/background";
