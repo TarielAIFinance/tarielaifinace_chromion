@@ -10,12 +10,13 @@ import { Loader } from "@/components/ui/thinkingLoader/loader";
 import { sendChatMessage, ChatContext, ChatApiError } from '@/lib/api/chat';
 import { useTextStream } from "@/components/ui/responseStream/response-stream";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
-import { MessageSquare, TrendingUp } from 'lucide-react';
+import { MessageSquare, TrendingUp, Sparkles, BarChart3, ActivitySquare } from 'lucide-react';
 import { ChatTable, parseContent } from '@/components/ui/tableIntegration';
 import { SidebarSessionDisplay } from '@/components/ui/sidebar/session-display';
 import { getOrCreateSessionId } from '@/lib/api/session';
 import { getRemainingCalls, incrementSessionCalls } from '@/lib/api/session-calls';
 import { DEFAULT_SYSTEM_CONFIG } from '@/lib/api/chat';
+import { Dock } from "@/components/ui/dock-two";
 
 // Define message structure
 interface ChatMessage {
@@ -188,7 +189,7 @@ const ActionCard = ({ icon, title, description, onClick }: ActionCardProps) => {
   return (
     <div 
       onClick={onClick}
-      className="relative w-80 h-48 cursor-pointer"
+      className="relative w-full md:w-80 h-48 cursor-pointer"
     >
       <div className="relative h-full rounded-xl border border-Tariel-border p-1">
         <GlowingEffect
@@ -233,6 +234,19 @@ const MainContent = () => {
     systemConfig: DEFAULT_SYSTEM_CONFIG,
     lastUserMessage: undefined
   });
+
+  // Add state for selected token
+  const [selectedToken, setSelectedToken] = useState<string>('');
+  
+  // Define crypto tokens for the dock
+  const cryptoTokens = [
+    { icon: "/brands/dai.svg", label: "DAI", onClick: () => handleTokenSelect("DAI") },
+    { icon: "/brands/tether.svg", label: "USDT", onClick: () => handleTokenSelect("USDT") },
+    { icon: "/brands/usdc.svg", label: "USDC", onClick: () => handleTokenSelect("USDC") },
+    { icon: Sparkles, label: "Yield", onClick: () => handleTokenSelect("Yield"), iconColor: "text-yellow-400" },
+    { icon: BarChart3, label: "Charts", onClick: () => handleTokenSelect("Charts"), iconColor: "text-blue-400" },
+    { icon: ActivitySquare, label: "Stats", onClick: () => handleTokenSelect("Stats"), iconColor: "text-violet-400" },
+  ];
 
   // Move session initialization to useEffect
   useEffect(() => {
@@ -389,6 +403,35 @@ const MainContent = () => {
     setChatContext({ messages: [], systemConfig: DEFAULT_SYSTEM_CONFIG, lastUserMessage: undefined });
   }, [sessionId]);
 
+  // Handler for token selection
+  const handleTokenSelect = (token: string) => {
+    setSelectedToken(token);
+    
+    // Auto-generate prompts based on selected token
+    switch(token) {
+      case "DAI":
+        handleSubmit("Tell me about the current stability of DAI and its backing mechanism.");
+        break;
+      case "USDT":
+        handleSubmit("What are the latest regulatory developments affecting USDT?");
+        break;
+      case "USDC":
+        handleSubmit("Compare USDC's reserves and transparency to other stablecoins.");
+        break;
+      case "Yield":
+        handleSubmit("What are the best yield opportunities for stablecoins right now?");
+        break;
+      case "Charts":
+        handleSubmit("Show me price stability charts for major stablecoins over the past month.");
+        break;
+      case "Stats":
+        handleSubmit("What's the total market cap and daily volume for the top stablecoins?");
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       
@@ -405,7 +448,7 @@ const MainContent = () => {
             </p>
           </div>
           {/* Cards Section - Restore Tariel Styling */}
-          <div className="flex space-x-6 mb-12">
+          <div className="flex flex-col md:flex-row gap-6 px-4 md:px-0 w-full md:w-auto md:space-x-6 mb-12">
             <ActionCard
               icon={<Image src="/brands/MetaMask-icon-Fox.svg" alt="Metamask action icon" width={32} height={32} className="text-brand-purple" />}
               title="Mint USDai"
@@ -435,6 +478,17 @@ const MainContent = () => {
                 isLoading={isAILoading}
                 placeholder="Ask me anything..."
               />
+              
+              {/* Dock below the input field */}
+              <div className="mt-2 flex justify-center">
+                <Dock 
+                  items={cryptoTokens} 
+                  variant="fixed" 
+                  selected={selectedToken}
+                  onSelect={setSelectedToken}
+                  className="w-auto" 
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -519,6 +573,17 @@ const MainContent = () => {
                 isLoading={isAILoading}
                 placeholder={isChatActive ? "Send a message..." : "Ask me anything..."}
               />
+              
+              {/* Dock below the input field */}
+              <div className="mt-2 flex justify-center">
+                <Dock 
+                  items={cryptoTokens} 
+                  variant="fixed" 
+                  selected={selectedToken}
+                  onSelect={setSelectedToken}
+                  className="w-auto" 
+                />
+              </div>
             </div>
           </div>
         </div>
