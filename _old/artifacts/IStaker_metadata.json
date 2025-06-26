@@ -1,0 +1,128 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "redeem",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "stake",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "THIS IS AN EXAMPLE CONTRACT THAT USES HARDCODED VALUES FOR CLARITY. THIS IS AN EXAMPLE CONTRACT THAT USES UN-AUDITED CODE. DO NOT USE THIS CODE IN PRODUCTION.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"v2/TreasuryManagerBASE.sol": "IStaker"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xb887157b76f9985dc9c622eb97aaa83974045481892934fe51847d7aaa327c4b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0aaed6871c4a96ca18a85f7fb6c9c9f59a2f7e01a4f177652c07bc4280729740",
+				"dweb:/ipfs/QmVqjGKEhVu2M6dCdXD9UyzKWQ9bfCez6dMiiPP1ZFXZbs"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x527e858729af8197f6c8f99554d32bfc4f5a72b15975489c94809363d7ae522f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6828dfa867eaff18f383aad4ca4b5aaedb93109023d74aaf418fee6c06e556c2",
+				"dweb:/ipfs/QmXSQ9WnaJ6Ba9gvKvgNxDY7sa7ATJ9V55uwGSGCpBuJKu"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0x057a2ba732c7946ef55d676e5a7aa0119443cf67c75f404838065a31ddd4877c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://68f38ed8ff0ec8fbbadee903b8bcffe6338d5af1042b03fc6e1947544b2e49c3",
+				"dweb:/ipfs/QmZ5Xog8PEALYzQ86xTZUcevA9ihr7MXKU3z8wRqD6rg9B"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+			"keccak256": "0x28d267ba89cbaca4a86577add59f1a18842ca6e7d80a05f3dbf52127928a5e2c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://67a26777e88ae78952713f4479ca3126db804dc9ce1a85f079ec067393a6275d",
+				"dweb:/ipfs/QmNLxBkkA6os8W9vUeCsjcFsMkGhtqAZrGjPuoACTqVhbh"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x19d64e8f5fa895ab2625917111fd9f316d4f9314239f0712fd6dc2f5bff9d0c9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://14de158ff9e64ebeac381bba59fe3500b48853063cfb27343090a3f710795fee",
+				"dweb:/ipfs/QmQJE5SfDfgy8aKENnsjW4t9P4bmTSnujotFmnXnrwpfzQ"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/Address.sol": {
+			"keccak256": "0x172a09a55d730f20a9bb309086a4ad06b17c612151f58bab2b44efe78d583d4e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1f812456ddd112f09606bfc5965c6e643558d740264273017ad556122502b4e2",
+				"dweb:/ipfs/QmdWE4wncanz9Lhu5ESgSo14jAR74Ss5puCM5zUGonATLw"
+			]
+		},
+		"@chainlink/contracts@1.4.0/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/Context.sol": {
+			"keccak256": "0x197651ff7207345936e19940e36235967fe866449caa294e19642b6c6aaa62f8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3cb4e784c91e106ee75877271ff11f9997a68bc9e577cab4d36d60a10b88e6e9",
+				"dweb:/ipfs/QmVuLfSBsfsqcpUcsFaY275Re3n7uQW6ErhDGpYHY92uBo"
+			]
+		},
+		"v2/TreasuryManagerBASE.sol": {
+			"keccak256": "0xdd5d8de199db10fa1228fe4dc0e7a8cc7c4e2d10deaea16abb6f4edcad4dd3fb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e84aa54d93b63b616532ee95fd84ba7ec28f1cc646ea5339bc8eda7c48e405d5",
+				"dweb:/ipfs/QmPjkVcnZGueFHGF5KtkknVj9UYvvpiMUBEho2TbpquudA"
+			]
+		}
+	},
+	"version": 1
+}

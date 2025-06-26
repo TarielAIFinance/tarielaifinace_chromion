@@ -1,0 +1,470 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "destinationChainSelector",
+						"type": "uint64"
+					}
+				],
+				"name": "DestinationChainNotAllowlisted",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "FailedToWithdrawEth",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidReceiverAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "currentBalance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "calculatedFees",
+						"type": "uint256"
+					}
+				],
+				"name": "NotEnoughBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NothingToWithdraw",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferRequested",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint64",
+						"name": "destinationChainSelector",
+						"type": "uint64"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "feeToken",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "fees",
+						"type": "uint256"
+					}
+				],
+				"name": "TokensTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "acceptOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transferTokensPayLINK",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "_destinationChainSelector",
+						"type": "uint64"
+					},
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transferTokensPayNative",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "messageId",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_beneficiary",
+						"type": "address"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					}
+				],
+				"name": "withdrawToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "Constructor for the contract."
+				},
+				"transferTokensPayLINK(address,address,uint256)": {
+					"details": "Assumes your contract has sufficient LINK tokens to pay for the fees.",
+					"params": {
+						"_amount": "token amount.",
+						"_receiver": "The address of the recipient on the destination blockchain.",
+						"_token": "token address."
+					},
+					"returns": {
+						"messageId": "The ID of the message that was sent."
+					}
+				},
+				"transferTokensPayNative(uint64,address,address,uint256)": {
+					"details": "Assumes your contract has sufficient native gas like ETH on Ethereum or POL on Polygon.",
+					"params": {
+						"_amount": "token amount.",
+						"_destinationChainSelector": "The identifier (aka selector) for the destination blockchain.",
+						"_receiver": "The address of the recipient on the destination blockchain.",
+						"_token": "token address."
+					},
+					"returns": {
+						"messageId": "The ID of the message that was sent."
+					}
+				},
+				"withdraw(address)": {
+					"details": "This function reverts if there are no funds to withdraw or if the transfer fails. It should only be callable by the owner of the contract.",
+					"params": {
+						"_beneficiary": "The address to which the Ether should be transferred."
+					}
+				},
+				"withdrawToken(address,address)": {
+					"details": "This function reverts with a 'NothingToWithdraw' error if there are no tokens to withdraw.",
+					"params": {
+						"_beneficiary": "The address to which the tokens will be sent.",
+						"_token": "The contract address of the ERC20 token to be withdrawn."
+					}
+				}
+			},
+			"title": "- A simple contract for transferring tokens across chains.",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"acceptOwnership()": {
+					"notice": "Allows an ownership transfer to be completed by the recipient."
+				},
+				"owner()": {
+					"notice": "Get the current owner"
+				},
+				"transferOwnership(address)": {
+					"notice": "Allows an owner to begin transferring ownership to a new address."
+				},
+				"transferTokensPayLINK(address,address,uint256)": {
+					"notice": "Transfer tokens to receiver on the destination chain.pay in LINK.the token must be in the list of supported tokens.This function can only be called by the owner."
+				},
+				"transferTokensPayNative(uint64,address,address,uint256)": {
+					"notice": "Transfer tokens to receiver on the destination chain.Pay in native gas such as ETH on Ethereum or POL on Polygon.the token must be in the list of supported tokens.This function can only be called by the owner."
+				},
+				"withdraw(address)": {
+					"notice": "Allows the contract owner to withdraw the entire balance of Ether from the contract."
+				},
+				"withdrawToken(address,address)": {
+					"notice": "Allows the owner of the contract to withdraw all tokens of a specific ERC20 token."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"TreasuryManagerAVA.sol": "TreasuryManagerCCIPAVA"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@chainlink/contracts-ccip/contracts/interfaces/IRouterClient.sol": {
+			"keccak256": "0x21280104a988eb7022f8968b1672bafba80a74e59f5512415009dff9a37be46a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1bbcde3e9cd0c60f540ec0f2bbd70724cd6c9650428a1fade8c0589ef163d6ca",
+				"dweb:/ipfs/QmajfuurMHa1SKWVVXsydeKuPCGzXkKtRUi2HW5EA7p6gr"
+			]
+		},
+		"@chainlink/contracts-ccip/contracts/libraries/Client.sol": {
+			"keccak256": "0x7c736e12ebb1d0e3a0c99436eacfac14d16ec941843050c9a7d82a6bff5b35a1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7cf3e0bbece35e0d1936225535b5ea91e63e45ad363d61fbec8423a53e96f6e5",
+				"dweb:/ipfs/QmTMtUJcUGuMmLVMJ6PVTAWNatf9R77Cq6mzdDtFMUVB6h"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol": {
+			"keccak256": "0xdcb0e9135ddbe71ee27ba99fa06656960c66c964cf2ecb29696da1c1427d9861",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f914a1b638300e82d8f5a020a4195235599afebab4ef1e10c6992f3c90e7df3e",
+				"dweb:/ipfs/Qmf2MbuVB16qbCGii3U5cjcBvVjAHHYzKp9voJa2eDch9B"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwnerWithProposal.sol": {
+			"keccak256": "0x2422a055657a87e98be61f8f31abb1824ec50fd0f73949f4e3c6ac877efb6da8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fde3b9ac3a4c42ea43e2f92b037d32ab20e30818471c6e20d2590147a6c2958a",
+				"dweb:/ipfs/QmQ2ohQP4GnhPUsiWCvCfb1dsoGYDdxSap3dxtnYTV4rmT"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/shared/access/OwnerIsCreator.sol": {
+			"keccak256": "0x895af02d6a3df2930bbb6ec1f2d68118b492ca6e710ba0c34fcb6b574a0906aa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c4c69fab5eea1c0448f856a51d7e5736454fe5cc083d36c60bf3ee23bb3d0e8e",
+				"dweb:/ipfs/QmP4fYQ9k7xeZms6cwnqnQuuAkRkeE2TWewyvCD8Mrc2DZ"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/shared/interfaces/IOwnable.sol": {
+			"keccak256": "0x885de72b7b4e4f1bf8ba817a3f2bcc37fd9022d342c4ce76782151c30122d767",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://17c636625a5d29a140612db496d2cca9fb4b48c673adb0fd7b3957d287e75921",
+				"dweb:/ipfs/QmNoBX8TY424bdQWyQC7y3kpKfgxyWxhLw7KEhhEEoBN9q"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x527e858729af8197f6c8f99554d32bfc4f5a72b15975489c94809363d7ae522f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6828dfa867eaff18f383aad4ca4b5aaedb93109023d74aaf418fee6c06e556c2",
+				"dweb:/ipfs/QmXSQ9WnaJ6Ba9gvKvgNxDY7sa7ATJ9V55uwGSGCpBuJKu"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+			"keccak256": "0x28d267ba89cbaca4a86577add59f1a18842ca6e7d80a05f3dbf52127928a5e2c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://67a26777e88ae78952713f4479ca3126db804dc9ce1a85f079ec067393a6275d",
+				"dweb:/ipfs/QmNLxBkkA6os8W9vUeCsjcFsMkGhtqAZrGjPuoACTqVhbh"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x19d64e8f5fa895ab2625917111fd9f316d4f9314239f0712fd6dc2f5bff9d0c9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://14de158ff9e64ebeac381bba59fe3500b48853063cfb27343090a3f710795fee",
+				"dweb:/ipfs/QmQJE5SfDfgy8aKENnsjW4t9P4bmTSnujotFmnXnrwpfzQ"
+			]
+		},
+		"@chainlink/contracts/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/utils/Address.sol": {
+			"keccak256": "0x172a09a55d730f20a9bb309086a4ad06b17c612151f58bab2b44efe78d583d4e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1f812456ddd112f09606bfc5965c6e643558d740264273017ad556122502b4e2",
+				"dweb:/ipfs/QmdWE4wncanz9Lhu5ESgSo14jAR74Ss5puCM5zUGonATLw"
+			]
+		},
+		"TreasuryManagerAVA.sol": {
+			"keccak256": "0x5494dd80044756b15bf434066cef8282b710b60c195402cae5d56873e13d538f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fab3f36c907adb75c767ded7badcbd24b558eaa320bf2d75c491e006806c44ba",
+				"dweb:/ipfs/Qmce41qVz7uwc5m2mvPkegK468ZZUanhQLrSvWoMMKnsy4"
+			]
+		}
+	},
+	"version": 1
+}
