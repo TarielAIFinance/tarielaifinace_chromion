@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Key,
-  FileEdit,
   Radio,
   AppWindow,
   Settings2,
@@ -59,12 +58,10 @@ const NavLink = ({
 
 const Sidebar = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string>('');
   const [activeSection, setActiveSection] = useState<string>('');
 
   useEffect(() => {
     const id = getOrCreateSessionId();
-    setActiveSessionId(id);
 
     // Set up listener for session updates
     const handleSessionUpdate = (sessionId: string, calls: number) => {
@@ -109,7 +106,6 @@ const Sidebar = () => {
   const handleCreatePrompt = () => {
     setActiveSection('create');
     const newId = getOrCreateSessionId(true);
-    setActiveSessionId(newId);
     
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('session_created', { detail: newId }));
@@ -117,13 +113,13 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#101010] text-[#e8eaed]">
+    <div className="h-full flex flex-col bg-[#1a1b1e] text-[#e8eaed]">
       {/* Header */}
       <div className="px-4 py-4 mb-3">
         <h1 className="text-lg font-semibold text-[#e8eaed]">Tariel AI Studio</h1>
       </div>
 
-      {/* Hauptnavigation mit klar definierten Abständen */}
+      {/* Main navigation with clearly defined spacing */}
       <div className="flex flex-col space-y-0.5 px-2 mb-3">
         <button className="relative group flex items-center justify-start h-10 px-4 rounded-lg bg-brand-purple text-white text-sm font-medium cursor-pointer hover:bg-brand-purple/90">
           <div className="relative z-10 flex items-center">
@@ -138,7 +134,7 @@ const Sidebar = () => {
           className={cn(
             "relative group flex items-center justify-start h-10 px-4 rounded-lg text-sm font-medium cursor-pointer",
             activeSection === 'create' 
-              ? "bg-[#262626] text-brand-purple" 
+              ? "bg-[#2d2e2f] text-brand-purple" 
               : "bg-gradient-to-r from-brand-purple/80 to-brand-purple text-white hover:from-brand-purple hover:to-brand-purple/90"
           )}
         >
@@ -150,7 +146,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Hauptnavigation */} 
+              {/* Main navigation */} 
       <div className="flex-grow px-2 space-y-0">
         <NavLink 
           href="#" 
@@ -182,13 +178,13 @@ const Sidebar = () => {
           <History className="w-5 h-5 mr-4" /> History
         </NavLink>
         
-        {/* History Conversations mit klarer Einrückung */}
+        {/* History conversations with clear indentation */}
         {activeSection === 'history' && conversations.length > 0 && (
-          <div className="border-l border-gray-700 ml-7 pl-3 py-1 my-1 space-y-1">
+          <div className="border-l border-[#3c3d3e] ml-7 pl-3 py-1 my-1 space-y-1">
             {conversations.map(conv => (
               <div 
                 key={conv.id} 
-                className="flex items-center justify-between group text-sm text-gray-400 py-1.5 px-1.5"
+                className="flex items-center justify-between group text-sm text-[#9aa0a6] py-1.5 px-1.5"
               >
                 <span className="flex-1 truncate">Session {conv.id.slice(-8)}</span>
                 <button 
@@ -207,9 +203,9 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* Zweite Navigation Gruppe */}
+              {/* Second navigation group */}
       <div className="px-2 mt-1">
-        <div className="text-xs uppercase text-gray-500 mb-2 px-4">Tools</div>
+        <div className="text-xs uppercase text-[#9aa0a6] mb-2 px-4">Tools</div>
         <div className="space-y-0">
           <NavLink 
             href="#" 
@@ -249,11 +245,11 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Horizontale Linie */}
-      <div className="h-px bg-gray-800 mx-4 my-3"></div>
+              {/* Horizontal line */}
+      <div className="h-px bg-[#3c3d3e] mx-4 my-3"></div>
 
-      {/* Feedback Text */}
-      <div className="px-4 py-3 text-xs text-gray-400">
+              {/* Feedback text */}
+      <div className="px-4 py-3 text-xs text-[#9aa0a6]">
         This experimental model is for feedback and testing only. No production use.
       </div>
 

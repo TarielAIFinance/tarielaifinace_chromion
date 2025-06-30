@@ -25,16 +25,25 @@ interface ChatMessage {
   text: string;
 }
 
+// Define custom events interfaces
+interface SessionDeletedEvent extends CustomEvent {
+  detail: string; // session ID
+}
+
+interface SessionCreatedEvent extends CustomEvent {
+  detail: string; // session ID
+}
+
 // Text formatting components
 const TextBlock = {
   heading1: (text: string, key?: string): ReactElement => (
     <div key={key} className="text-2xl font-semibold mb-6 text-Tariel-text-light">{text}</div>
   ),
   heading2: (text: string, key?: string): ReactElement => (
-    <div key={key} className="text-xl font-semibold mb-4 text-Tariel-text-light">{text}</div>
+    <div key={key} className="text-xl font-semibold mb-2 text-Tariel-text-light">{text}</div>
   ),
   paragraph: (text: string, key?: string): ReactElement => (
-    <div key={key} className="text-base leading-relaxed mb-4 text-Tariel-text-light">{text}</div>
+    <div key={key} className="text-base leading-relaxed mb-1 text-Tariel-text-light">{text}</div>
   ),
   listItem: (text: string, key?: string): ReactElement => (
     <div key={key} className="flex items-start mb-2">
@@ -96,7 +105,7 @@ const StreamingMarkdown: React.FC<StreamingMarkdownProps> = ({
       
       if (!trimmedLine) {
         formattedContent.push(
-          <div key={getUniqueKey()} className="h-4" />
+          <div key={getUniqueKey()} className="h-2" />
         );
         return;
       }
@@ -189,9 +198,9 @@ const ActionCard = ({ icon, title, description, onClick }: ActionCardProps) => {
   return (
     <div 
       onClick={onClick}
-      className="relative w-full md:w-80 h-48 cursor-pointer"
+      className="relative w-full h-52 cursor-pointer"
     >
-      <div className="relative h-full rounded-xl border border-Tariel-border p-1">
+      <div className="relative h-full rounded-xl border border-[#3c3d3e] p-1">
         <GlowingEffect
           spread={40}
           glow={true}
@@ -206,7 +215,7 @@ const ActionCard = ({ icon, title, description, onClick }: ActionCardProps) => {
             {icon}
           </div>
           <h3 className="text-lg font-semibold text-brand-purple text-center">{title}</h3>
-          <p className="text-sm text-Tariel-text-secondary text-center leading-relaxed">{description}</p>
+          <p className="text-sm text-[#9aa0a6] text-center leading-relaxed">{description}</p>
         </div>
       </div>
     </div>
@@ -269,7 +278,7 @@ const MainContent = () => {
       }
     };
 
-    const handleSessionCreated = (e: any) => {
+    const handleSessionCreated = (e: SessionCreatedEvent) => {
       const newSessionId = e.detail;
       // Reset chat state
       setChatHistory([]);
@@ -280,12 +289,19 @@ const MainContent = () => {
 
     // Listen for session events
     if (typeof window !== 'undefined') {
-      window.addEventListener('session_deleted', (e: any) => handleSessionDeleted(e.detail));
-      window.addEventListener('session_created', handleSessionCreated);
+      // TypeScript doesn't natively support CustomEvent with detail typing
+      // Using type assertions to properly handle the custom events
+      const sessionDeletedHandler = ((e: Event) => {
+        const customEvent = e as SessionDeletedEvent;
+        handleSessionDeleted(customEvent.detail);
+      }) as EventListener;
+      
+      window.addEventListener('session_deleted', sessionDeletedHandler);
+      window.addEventListener('session_created', handleSessionCreated as EventListener);
 
       return () => {
-        window.removeEventListener('session_deleted', (e: any) => handleSessionDeleted(e.detail));
-        window.removeEventListener('session_created', handleSessionCreated);
+        window.removeEventListener('session_deleted', sessionDeletedHandler);
+        window.removeEventListener('session_created', handleSessionCreated as EventListener);
       };
     }
   }, [sessionId]);
@@ -437,50 +453,64 @@ const MainContent = () => {
       
       {!isChatActive ? (
         // *******************
-        // Initial View (Without Input Area)
+        // Initial View - Fixed Layout
         // *******************
-        <div className="flex flex-col items-center justify-center flex-grow p-6 text-center">
-          {/* Title and Subtitle */}
-          <div className='mb-12'>
-            <h1 className="text-5xl font-semibold text-Tariel-text-light mb-3">What will you use DeFAI for?</h1>
-            <p className="text-lg text-Tariel-text-secondary">
-              Push Tariels Agent to the limits of what AI can do using the Tariel Finance API
-            </p>
-          </div>
-          {/* Cards Section - Restore Tariel Styling */}
-          <div className="flex flex-col md:flex-row gap-6 px-4 md:px-0 w-full md:w-auto md:space-x-6 mb-12">
-            <ActionCard
-              icon={<Image src="/brands/MetaMask-icon-Fox.svg" alt="Metamask action icon" width={32} height={32} className="text-brand-purple" />}
-              title="Mint USDai"
-              description="Mint USDai tokens with a single message."
-              onClick={() => console.log('Metamask action clicked')}
-            />
-            <ActionCard
-              icon={<MessageSquare className="w-8 h-8 text-brand-purple" />}
-              title="Regulatory Analysis"
-              description="Get USDT's regulatory status and risks."
-              onClick={handleSentimentClick}
-            />
-            <ActionCard
-              icon={<TrendingUp className="w-8 h-8 text-brand-purple" />}
-              title="Tariel Yield"
-              description="Find best yields with Tariel's AI strategy."
-              onClick={handleYieldOptimizationClick}
-            />
+        <div className="h-full flex flex-col overflow-hidden">
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col items-center justify-start px-6 py-8 overflow-y-auto">
+            {/* Title and Subtitle */}
+            <div className="text-center mb-8 mt-4">
+              <h1 className="text-5xl font-semibold text-[#e8eaed] mb-4">
+                Your AI Financial Assistant
+              </h1>
+              <p className="text-lg text-[#9aa0a6] mb-8">
+                Get instant answers about digital finance, investments, and market trends
+              </p>
+              <div className="bg-[#2d2e2f] border border-[#3c3d3e] rounded-lg p-4 max-w-xl mx-auto">
+                <p className="text-sm text-[#e8eaed] mb-2">
+                  <span className="font-semibold text-[#8ab4f8]">New to crypto?</span> No problem! 
+                </p>
+                <p className="text-sm text-[#9aa0a6]">
+                  Ask questions like "What is cryptocurrency?" or "How do I start investing?" 
+                  Our AI explains everything in simple terms.
+                </p>
+              </div>
+            </div>
+            
+            {/* Cards Section */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full mb-8">
+              <ActionCard
+                icon={<Image src="/brands/MetaMask-icon-Fox.svg" alt="Digital wallet icon" width={32} height={32} className="text-brand-purple" />}
+                title="💰 Create Digital Money"
+                description="Learn how to create stable digital coins (like digital dollars) safely and easily."
+                onClick={() => console.log('Digital money action clicked')}
+              />
+              <ActionCard
+                icon={<MessageSquare className="w-8 h-8 text-brand-purple" />}
+                title="📊 Market Safety Check"
+                description="Check if your investments are safe and what the latest regulations mean for you."
+                onClick={handleSentimentClick}
+              />
+              <ActionCard
+                icon={<TrendingUp className="w-8 h-8 text-brand-purple" />}
+                title="📈 Smart Investment Tips"
+                description="Get AI-powered advice on how to grow your money with low-risk strategies."
+                onClick={handleYieldOptimizationClick}
+              />
+            </div>
           </div>
           
-          {/* Input Field Container for Initial View */}
-          <div className="w-full absolute bottom-0 left-0 right-0">
-            <div className="h-24 bg-gradient-to-t from-Tariel-content-bg via-Tariel-content-bg to-transparent absolute inset-x-0 bottom-0" />
-            <div className="relative max-w-[1600px] mx-auto px-12 py-4">
+          {/* Fixed Bottom Input Area */}
+          <div className="flex-shrink-0 w-full border-t border-[#3c3d3e] bg-[#1a1b1e] min-h-[160px]">
+            <div className="max-w-4xl mx-auto px-6 py-6">
               <AIInputWithLoading 
                 onSubmit={handleSubmit}
                 isLoading={isAILoading}
-                placeholder="Ask me anything..."
+                placeholder="Try: 'What is cryptocurrency?' or 'How do I start investing?'"
               />
               
               {/* Dock below the input field */}
-              <div className="mt-2 flex justify-center">
+              <div className="mt-4 flex justify-center">
                 <Dock 
                   items={cryptoTokens} 
                   variant="fixed" 
@@ -499,7 +529,7 @@ const MainContent = () => {
         // *******************
         <div className="h-full flex flex-col flex-grow w-full mx-auto relative">
           {/* Top Bar with Chat Session and Auto-scroll Toggle */}
-          <div className="flex justify-between items-center px-8 py-2 mb-4 border-b border-Tariel-border">
+          <div className="flex justify-between items-center px-8 py-2 mb-4 border-b border-[#3c3d3e]">
             <SidebarSessionDisplay />
             <div className="flex items-center space-x-2">
               <Switch 
@@ -507,7 +537,7 @@ const MainContent = () => {
                 checked={autoScroll}
                 onCheckedChange={setAutoScroll}
               />
-              <Label htmlFor="auto-scroll-switch" className="text-sm text-Tariel-text-secondary">Auto-scroll</Label>
+              <Label htmlFor="auto-scroll-switch" className="text-sm text-[#9aa0a6]">Auto-scroll</Label>
             </div>
           </div>
 
@@ -517,7 +547,7 @@ const MainContent = () => {
             <div 
               ref={chatContainerRef} 
               className="absolute inset-0 overflow-y-auto px-12 scroll-smooth"
-              style={{ paddingBottom: 'calc(4rem + 100px)' }}
+              style={{ paddingBottom: 'calc(4rem + 160px)' }}
             >
               <div className="max-w-[1600px] mx-auto space-y-6 py-4">
                 {chatHistory.map((msg) => (
@@ -543,7 +573,7 @@ const MainContent = () => {
                         "p-4 rounded-lg break-words border",
                         msg.type === 'user' 
                           ? "bg-brand-purple text-white border-[#7B60DD] max-w-[45%]"
-                          : "bg-Tariel-input-bg text-Tariel-text-light border-[#5f6368] max-w-[98%]"
+                          : "bg-[#2d2e2f] text-[#e8eaed] border-[#3c3d3e] max-w-[98%]"
                       )}
                     >
                       {msg.type === 'thinking' ? (
@@ -565,9 +595,8 @@ const MainContent = () => {
           </div>
 
           {/* Input Field Container */}
-          <div className="sticky bottom-0 left-0 right-0 z-10">
-            <div className="h-24 bg-gradient-to-t from-Tariel-content-bg via-Tariel-content-bg to-transparent absolute inset-x-0 bottom-0" />
-            <div className="relative max-w-[1600px] mx-auto px-12 py-4">
+          <div className="sticky bottom-0 left-0 right-0 z-10 border-t border-[#3c3d3e] bg-[#1a1b1e] min-h-[160px]">
+            <div className="relative max-w-[1600px] mx-auto px-12 py-6">
               <AIInputWithLoading 
                 onSubmit={handleSubmit}
                 isLoading={isAILoading}
@@ -575,7 +604,7 @@ const MainContent = () => {
               />
               
               {/* Dock below the input field */}
-              <div className="mt-2 flex justify-center">
+              <div className="mt-4 flex justify-center">
                 <Dock 
                   items={cryptoTokens} 
                   variant="fixed" 

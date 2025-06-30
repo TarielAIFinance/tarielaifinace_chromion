@@ -37,7 +37,7 @@ const SelectItemWithDescription = ({
   <SelectItem value={value} disabled={disabled}>
     <div className="flex flex-col">
       <span className="font-medium">{title}</span>
-      <span className="text-xs text-Tariel-text-secondary">{description}</span>
+      <span className="text-xs text-google-text-secondary">{description}</span>
     </div>
   </SelectItem>
 )
@@ -45,45 +45,41 @@ const SelectItemWithDescription = ({
 const RightPanel = () => {
   const modelSelectId = useId();
   const outputFormatId = useId();
-  const [sessionId, setSessionId] = useState<string>('');
   const [sessionCalls, setSessionCalls] = useState<number>(0);
 
   useEffect(() => {
-    // Initialize session ID
+    // Initialize session ID and set up listener
     const id = getOrCreateSessionId();
-    setSessionId(id);
 
-    // Initialize call count only after we have a session ID
-    if (id) {
-      setSessionCalls(getCurrentSessionCalls(id));
+    // Initialize call count
+    setSessionCalls(getCurrentSessionCalls(id));
 
-      // Listen for updates
-      const updateListener = (updatedSessionId: string, calls: number) => {
-        if (updatedSessionId === id) {
-          setSessionCalls(calls);
-        }
-      };
+    // Listen for updates
+    const updateListener = (updatedSessionId: string, calls: number) => {
+      if (updatedSessionId === id) {
+        setSessionCalls(calls);
+      }
+    };
 
-      addSessionUpdateListener(updateListener);
+    addSessionUpdateListener(updateListener);
 
-      return () => {
-        removeSessionUpdateListener(updateListener);
-      };
-    }
+    return () => {
+      removeSessionUpdateListener(updateListener);
+    };
   }, []);
 
   return (
-    <div className="h-full flex flex-col p-4 bg-Tariel-dark-bg text-Tariel-text-secondary space-y-4 overflow-y-auto">
+    <div className="h-full flex flex-col p-4 bg-[#1a1b1e] text-[#9aa0a6] space-y-4 overflow-y-auto">
       {/* Run Settings Header */}
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-sm font-semibold text-Tariel-text-light uppercase tracking-wide">Run settings</h2>
-        <button className="text-Tariel-text-secondary hover:text-Tariel-text-light">
+        <h2 className="text-sm font-semibold text-[#e8eaed] uppercase tracking-wide">Run settings</h2>
+        <button className="text-[#9aa0a6] hover:text-[#e8eaed]">
           <RefreshCw className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Get Code - Tariel Blue */}
-      <button className="flex items-center text-sm text-Tariel-blue hover:opacity-80">
+      {/* Get Code - Google Blue */}
+      <button className="flex items-center text-sm text-[#8ab4f8] hover:opacity-80">
         <Code className="w-5 h-5 mr-1" />
         Get code
       </button>
@@ -141,21 +137,21 @@ const RightPanel = () => {
 
       {/* Token Count - Updated to show actual session calls */}
       <div className="flex items-center justify-between pt-3">
-        <label className="block text-xs font-medium text-Tariel-text-secondary">Agent calls</label>
+        <label className="block text-xs font-medium text-google-text-secondary">Agent calls</label>
         <span className="flex items-center">
-          <Coins className="w-5 h-5 mr-1 text-Tariel-text-secondary" />
-          <span className="text-sm text-Tariel-text-light">{sessionCalls} / 30</span>
+          <Coins className="w-5 h-5 mr-1 text-google-text-secondary" />
+          <span className="text-sm text-google-text-light">{sessionCalls} / 30</span>
         </span>
       </div>
 
       {/* Temperature Section */}
       <div className="space-y-1.5 pt-2">
         <div className="flex items-center justify-between">
-          <label htmlFor="temperature-slider" className="flex items-center text-xs font-medium text-Tariel-text-secondary">
+          <label htmlFor="temperature-slider" className="flex items-center text-xs font-medium text-google-text-secondary">
             <Thermometer className="w-4 h-4 mr-1" />
             Temperature
           </label>
-          <span className="text-sm font-medium text-Tariel-text-light">1</span>
+          <span className="text-sm font-medium text-google-text-light">1</span>
         </div>
         <input
           id="temperature-slider"
@@ -164,22 +160,22 @@ const RightPanel = () => {
           max="1"
           step="0.1"
           defaultValue="1"
-          className="w-full h-2 bg-Tariel-border rounded-lg appearance-none cursor-pointer accent-Tariel-blue"
+          className="w-full h-2 bg-google-border rounded-lg appearance-none cursor-pointer accent-google-blue"
         />
       </div>
 
       {/* Advanced Settings Section */}
       <div className="pt-4">
         <button className="flex items-center justify-between w-full text-left focus:outline-none group">
-          <span className="text-xs font-medium text-Tariel-text-secondary">Advanced settings</span>
-          <ChevronDown className="h-5 w-5 text-Tariel-text-secondary transition-transform group-hover:text-Tariel-text-light" />
+          <span className="text-xs font-medium text-google-text-secondary">Advanced settings</span>
+          <ChevronDown className="h-5 w-5 text-google-text-secondary transition-transform group-hover:text-google-text-light" />
         </button>
-        <div className="mt-2 pl-2 space-y-2 border-l border-Tariel-border ml-1">
-          <a href="#" className="flex items-center text-sm text-Tariel-blue hover:opacity-80">
+        <div className="mt-2 pl-2 space-y-2 border-l border-google-border ml-1">
+          <a href="#" className="flex items-center text-sm text-google-blue hover:opacity-80">
             <Shield className="w-4 h-4 mr-1" />
             Safety settings
           </a>
-          <a href="#" className="flex items-center text-sm text-Tariel-blue hover:opacity-80">
+          <a href="#" className="flex items-center text-sm text-google-blue hover:opacity-80">
             <Shield className="w-4 h-4 mr-1" />
             Edit safety settings
           </a>
@@ -188,7 +184,7 @@ const RightPanel = () => {
 
       {/* Add Stop Sequence Section */}
       <div className="pt-4">
-        <label htmlFor="stop-sequence" className="flex items-center text-xs font-medium text-Tariel-text-secondary mb-1.5">
+        <label htmlFor="stop-sequence" className="flex items-center text-xs font-medium text-google-text-secondary mb-1.5">
           <Square className="w-4 h-4 mr-1" />
           Add stop sequence
         </label>
@@ -196,7 +192,7 @@ const RightPanel = () => {
           type="text"
           name="stop-sequence"
           id="stop-sequence"
-          className="block w-full bg-[#1a1b1e] border border-Tariel-border rounded-lg shadow-sm py-2 px-3 text-sm text-Tariel-text-light placeholder-Tariel-text-secondary focus:outline-none focus:ring-1 focus:ring-Tariel-blue focus:border-Tariel-blue transition-colors hover:bg-[#2a2b2e]"
+          className="block w-full bg-google-input-bg border border-google-border rounded-lg shadow-sm py-2 px-3 text-sm text-google-text-light placeholder-google-text-secondary focus:outline-none focus:ring-1 focus:ring-google-blue focus:border-google-blue transition-colors hover:bg-google-content-bg"
           placeholder="Add stop..."
         />
       </div>

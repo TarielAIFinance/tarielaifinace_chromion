@@ -1,5 +1,5 @@
 import { API_CONFIG } from './config';
-import { ChatRequest, ChatResponse, ChatContext, ClientMessage, ApiRequestMessage, SystemConfig } from './types';
+import { ChatRequest, ChatContext, ClientMessage, SystemConfig } from './types';
 
 // Re-export types needed by components
 export type { ChatContext, ClientMessage, SystemConfig };
@@ -85,7 +85,7 @@ export class ChatApiError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public data?: any
+    public data?: Record<string, unknown>
   ) {
     super(message);
     this.name = 'ChatApiError';

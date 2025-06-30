@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -48,11 +48,13 @@ export function BeamsBackground({
     const animationFrameRef = useRef<number>(0);
     const MINIMUM_BEAMS = 20;
 
-    const opacityMap = {
+    // Use useMemo to avoid recreating the opacityMap object on each render
+    // This stabilizes the dependency array and prevents unnecessary effect reruns
+    const opacityMap = useMemo(() => ({
         subtle: 0.7,
         medium: 0.85,
         strong: 1,
-    };
+    }), []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -164,7 +166,7 @@ export function BeamsBackground({
                 cancelAnimationFrame(animationFrameRef.current);
             }
         };
-    }, [intensity]);
+    }, [intensity, opacityMap]); // Include opacityMap in the dependency array
 
     return (
         <div

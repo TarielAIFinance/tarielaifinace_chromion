@@ -22,14 +22,6 @@ function getCallsCount(sessionId: string): number {
   return stored ? parseInt(stored, 10) : 0;
 }
 
-// Save calls count to storage
-function saveCallsCount(sessionId: string, count: number): void {
-  if (!isClient) return;
-  
-  const storageKey = `${STORAGE_KEYS.CALLS_COUNT}_${sessionId}`;
-  localStorage.setItem(storageKey, count.toString());
-}
-
 export function getCurrentSessionCalls(sessionId: string): number {
   return sessionCalls[sessionId] || 0;
 }

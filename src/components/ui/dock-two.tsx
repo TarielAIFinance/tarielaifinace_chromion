@@ -7,7 +7,7 @@ import Image from "next/image"
 interface DockProps {
   className?: string
   items: {
-    icon: React.ComponentType<any> | string  // Updated to accept both LucideIcon and string paths
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>> | string
     label: string
     onClick?: () => void
     iconColor?: string // Optional color for icons
@@ -18,7 +18,7 @@ interface DockProps {
 }
 
 interface DockIconButtonProps {
-  icon: React.ComponentType<any> | string
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>> | string
   label: string
   onClick?: () => void
   className?: string

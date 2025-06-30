@@ -4,6 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First, run the development server:
 
+cd /mnt/c/Users/sabo2/Desktop/DeFAI\ UI/tariel-ai-studio
 ```bash
 npm run dev
 # or
